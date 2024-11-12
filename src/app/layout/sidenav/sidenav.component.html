@@ -1,0 +1,29 @@
+<nav>
+  <ul>
+    <li>
+      <span class="text-center" mat-button routerLink="">
+        <!-- <img class="logo" src="/logo/logo-3.png" alt="Logo" /> -->
+        <h2 class="app-name">Transactly</h2>
+      </span>
+    </li>
+    <br />
+    @for (item of menuItems; track $index) {
+    <li>
+      <a
+      (click)="menuItemClicked()"
+        mat-button
+        routerLink="{{ item.routerLink }}"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    </li>
+    }
+    <mat-divider></mat-divider>
+    <li>
+      <a mat-button><mat-icon>login</mat-icon> <span>Sign In</span> </a>
+    </li>
+  </ul>
+</nav>

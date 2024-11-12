@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+$transactly-app-theme: mat.define-theme(
+  (
+    color: (
+      use-system-variables: true,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+@import "bootstrap/scss/bootstrap-grid.scss"; // Add .container and .container-fluid classes
+@import "bootstrap/scss/bootstrap-utilities.scss"; // Add the grid system
+
+@import "./app/theme/dark-theme-variables.scss";
+@import "./app/theme/light-theme-variables.scss";
+
+:root {
+  @include mat.all-component-themes($transactly-app-theme);
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
