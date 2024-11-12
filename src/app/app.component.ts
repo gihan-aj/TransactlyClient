@@ -4,11 +4,12 @@ import { TopBarComponent } from './layout/top-bar/top-bar.component';
 import { SidenavComponent } from './layout/sidenav/sidenav.component';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { FooterComponent } from './layout/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TopBarComponent, SidenavComponent, MatSidenavModule],
+  imports: [RouterOutlet, TopBarComponent, SidenavComponent, FooterComponent, MatSidenavModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
