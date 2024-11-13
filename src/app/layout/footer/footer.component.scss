@@ -1,9 +1,13 @@
 .footer {
   margin: 0 auto;
-  text-align: center;
+  // text-align: center;
   padding: 1rem 0;
-  position: static;
+  padding-left: 1rem;
+  position: fixed;
   bottom: 0;
   width: 100%;
   font-size: 0.8rem;
+  z-index: 10;
+  background-color: var(--sys-background);
+  color: var(--sys-on-background);
 }

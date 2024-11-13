@@ -23,7 +23,7 @@ export class SidenavComponent {
 
   menuItems = [
     {
-      routerLink: '',
+      routerLink: 'dashboard',
       icon: 'dashboard',
       label: 'Dashboard',
     },

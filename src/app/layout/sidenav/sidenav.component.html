@@ -7,14 +7,14 @@
       </span>
     </li>
     <br />
-    @for (item of menuItems; track $index) {
+    @for (item of menuItems; track $index; let first = $first) {
     <li>
       <a
-      (click)="menuItemClicked()"
+        (click)="menuItemClicked()"
         mat-button
         routerLink="{{ item.routerLink }}"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="first ? { exact: true } : { exact: false }"
       >
         <mat-icon>{{ item.icon }}</mat-icon>
         <span>{{ item.label }}</span>

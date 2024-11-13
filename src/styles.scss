@@ -18,6 +18,7 @@ $transactly-app-theme: mat.define-theme(
 
 @import "./app/theme/dark-theme-variables.scss";
 @import "./app/theme/light-theme-variables.scss";
+@import "./app/theme/clickable-card-container.scss";
 
 :root {
   @include mat.all-component-themes($transactly-app-theme);
@@ -30,4 +31,8 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1 {
+  margin-top: 0;
 }

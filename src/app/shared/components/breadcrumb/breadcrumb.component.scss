@@ -1,0 +1,37 @@
+.breadcrumb {
+  white-space: nowrap; /* Prevent line breaks */
+  padding: 0;
+  margin: 0;
+  overflow-x: auto; /* Horizontal scroll if items overflow */
+  scrollbar-width: thin; /* For Firefox, make the scrollbar thin */
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  // color: #6c757d;
+  color: var(--sys-on-primary-container);
+}
+
+.breadcrumb-item a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--sys-tertiary);
+}
+
+.breadcrumb-item span {
+  color: var(--sys-on-primary-container); /* Separator color */
+}
+
+.breadcrumb::-webkit-scrollbar {
+  height: 4px; /* Adjust scrollbar height */
+}
+
+.breadcrumb::-webkit-scrollbar-thumb {
+  background-color: var(--sys-on-primary-container); /* Scrollbar color */
+  border-radius: 2px;
+}

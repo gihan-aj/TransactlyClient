@@ -1,0 +1,42 @@
+<nav aria-label="Breadcrumb">
+  <div class="row">
+    <div class="col">
+      <ul class="breadcrumb d-flex align-items-center overflow-auto">
+        <!-- Home Icon -->
+        <li class="breadcrumb-item me-2">
+          <a [routerLink]="'dashboard'">
+            <mat-icon>home</mat-icon>
+          </a>
+        </li>
+
+        <!-- Dynamic Breadcrumb Items -->
+        <ng-container
+          *ngFor="let breadcrumb of breadcrumbs$ | async; let i = index"
+        >
+          <li class="breadcrumb-item d-flex align-items-center">
+            <span class="mx-1">&gt;</span>
+            <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- <nav aria-label="Breadcrumb">
+  <ul>
+    <li>
+      <a [routerLink]="'dashboard'">
+        <mat-icon>home</mat-icon>
+      </a>
+    </li>
+    @for (breadcrumb of breadcrumbs$ | async; track $index) {
+    <li>
+      <mat-icon>arrow_right</mat-icon>
+      &gt;
+
+      <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+    </li>
+    }
+  </ul>
+</nav> -->
