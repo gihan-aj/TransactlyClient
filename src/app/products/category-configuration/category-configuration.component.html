@@ -1,1 +1,15 @@
-<h1>Category Configuration</h1>
+<h1 class="mb-4">Category Configuration</h1>
+
+<div class="row align-items-center mb-3">
+  <div class="col-md-8 col-sm-12">
+    <app-search-bar
+      [placeHolderText]="'Search categories here...'"
+      (searchTerm)="getSearchTerm($event)"
+    ></app-search-bar>
+  </div>
+  <div class="col-md-4 col-sm-12 text-md-end text-sm-start mt-2 mt-md-0">
+    <button mat-flat-button>Add new category</button>
+  </div>
+</div>
+
+<!-- <button (click)="showAlert(alertTypes.success)">Show success</button> -->

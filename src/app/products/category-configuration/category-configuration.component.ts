@@ -2,16 +2,23 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CategoryConfigurationService } from './category-configuration.service';
 import { PagedListInterface } from '../../shared/models/paged-list.interface';
 import { CategoryResponseInterface } from './category-response.interface';
+import { AlertTypeEnum } from '../../shared/enums/alert-type.enum';
+
+import { MatButtonModule } from '@angular/material/button';
+import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
+import { SnackBarService } from '../../shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-category-configuration',
   standalone: true,
-  imports: [],
+  imports: [SearchBarComponent, MatButtonModule],
   templateUrl: './category-configuration.component.html',
   styleUrl: './category-configuration.component.scss',
 })
 export class CategoryConfigurationComponent implements OnInit {
   categoryService = inject(CategoryConfigurationService);
+  snackBarService = inject(SnackBarService);
+  alertTypes = AlertTypeEnum;
 
   ngOnInit(): void {
     this.categoryService.get(1, 5).subscribe({
@@ -31,7 +38,21 @@ export class CategoryConfigurationComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
+          if (error.error.title) {
+            this.snackBarService.showNotification(
+              this.alertTypes.danger,
+              error.error.title
+            );
+          }
+          this.snackBarService.showNotification(
+            this.alertTypes.danger,
+            'Unidentified error occured'
+          );
         },
       });
+  }
+
+  getSearchTerm(value: string): void {
+    console.log(value);
   }
 }

@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+}
+
+.success {
+  color: var(--sys-primary-container);
+}
+
+.info {
+  color: var(--sys-tertiary-container);
+}
+
+.warning {
+  color: var(--sys-secondary-container);
+}
+
+.danger {
+  color: var(--sys-error-container);
+}
