@@ -1,4 +1,4 @@
-export interface CategoryInterface {
+export interface CategoryResponseInterface {
   id: string;
   name: string;
   description: string;
