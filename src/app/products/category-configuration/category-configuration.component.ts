@@ -3,11 +3,11 @@ import { CategoryConfigurationService } from './category-configuration.service';
 import { PagedListInterface } from '../../shared/models/paged-list.interface';
 import { CategoryResponseInterface } from './category-response.interface';
 import { AlertTypeEnum } from '../../shared/enums/alert-type.enum';
-
 import { MatButtonModule } from '@angular/material/button';
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 import { SnackBarService } from '../../shared/services/snack-bar.service';
 import { AlertService } from '../../shared/services/alert.service';
+import { DialogService } from '../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-category-configuration',
@@ -20,6 +20,7 @@ export class CategoryConfigurationComponent implements OnInit {
   categoryService = inject(CategoryConfigurationService);
   snackBarService = inject(SnackBarService);
   alertService = inject(AlertService);
+  dialogService = inject(DialogService);
   alertTypes = AlertTypeEnum;
 
   ngOnInit(): void {
@@ -65,6 +66,23 @@ export class CategoryConfigurationComponent implements OnInit {
       'Success',
       'Category added successfully.'
     );
+  }
+
+  showDialog() {
+    this.dialogService
+      .openDilaog(
+        this.alertTypes.danger,
+        'Delete Confirmation',
+        'Are you sure you want to delete these records?',
+        'Delete'
+      )
+      .afterClosed()
+      .subscribe({
+        next: (yes) => {
+          if (yes) console.log('deleted');
+          else console.log('cancelled');
+        },
+      });
   }
 
   getSearchTerm(value: string): void {

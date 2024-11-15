@@ -1,0 +1,17 @@
+<h2 [ngClass]="[data.type + '-text']" mat-dialog-title>{{ data.title }}</h2>
+<div matDialogContent>
+  {{ data.text }}
+</div>
+<div matDialogActions align="end">
+  <button [ngClass]="[data.type + '-text']" mat-button mat-dialog-close>
+    Cancel
+  </button>
+  <button
+    [ngClass]="[data.type]"
+    mat-button
+    [mat-dialog-close]="true"
+    cdkFocusInitial
+  >
+    {{ data.action }}
+  </button>
+</div>
