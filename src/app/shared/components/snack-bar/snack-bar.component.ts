@@ -6,9 +6,9 @@ import {
   MatSnackBarLabel,
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
-import { AlertInterface } from '../../models/alert.interface';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { SnackBarInterface } from '../../models/snack-bar.interface';
 
 @Component({
   selector: 'app-snack-bar',
@@ -25,5 +25,5 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class SnackBarComponent {
   snackBarRef = inject(MatSnackBarRef);
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: AlertInterface) {}
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: SnackBarInterface) {}
 }

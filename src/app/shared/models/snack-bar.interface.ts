@@ -1,7 +1,6 @@
 import { AlertTypeEnum } from '../enums/alert-type.enum';
 
-export interface AlertInterface {
+export interface SnackBarInterface {
   type: AlertTypeEnum;
-  title: string;
   text: string;
 }

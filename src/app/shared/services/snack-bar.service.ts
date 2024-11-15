@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertTypeEnum } from '../enums/alert-type.enum';
 import { SnackBarComponent } from '../components/snack-bar/snack-bar.component';
-import { AlertInterface } from '../models/alert.interface';
+import { SnackBarInterface } from '../models/snack-bar.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +12,12 @@ export class SnackBarService {
 
   showNotification(
     type: AlertTypeEnum,
-    message: string,
+    text: string,
     duration: number = 5000
   ): void {
-    const alert: AlertInterface = {
+    const alert: SnackBarInterface = {
       type: type,
-      text: message,
+      text: text,
     };
 
     this._snackBar.openFromComponent(SnackBarComponent, {

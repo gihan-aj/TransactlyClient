@@ -7,6 +7,7 @@ import { AlertTypeEnum } from '../../shared/enums/alert-type.enum';
 import { MatButtonModule } from '@angular/material/button';
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 import { SnackBarService } from '../../shared/services/snack-bar.service';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'app-category-configuration',
@@ -18,18 +19,10 @@ import { SnackBarService } from '../../shared/services/snack-bar.service';
 export class CategoryConfigurationComponent implements OnInit {
   categoryService = inject(CategoryConfigurationService);
   snackBarService = inject(SnackBarService);
+  alertService = inject(AlertService);
   alertTypes = AlertTypeEnum;
 
   ngOnInit(): void {
-    this.categoryService.get(1, 5).subscribe({
-      next: (data: PagedListInterface<CategoryResponseInterface>) => {
-        console.log(data);
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-
     this.categoryService
       .getById('bef3f647-6833-465e-b180-034337ef524c')
       .subscribe({
@@ -39,17 +32,39 @@ export class CategoryConfigurationComponent implements OnInit {
         error: (error) => {
           console.log(error);
           if (error.error.title) {
-            this.snackBarService.showNotification(
+            this.alertService.alert(
               this.alertTypes.danger,
-              error.error.title
+              error.error.title,
+              error.error.detail
+            );
+          } else {
+            this.alertService.alert(
+              this.alertTypes.danger,
+              'Unknown Error',
+              'Unidentified error occured'
             );
           }
-          this.snackBarService.showNotification(
-            this.alertTypes.danger,
-            'Unidentified error occured'
-          );
         },
       });
+  }
+
+  get() {
+    this.categoryService.get(1, 5).subscribe({
+      next: (data: PagedListInterface<CategoryResponseInterface>) => {
+        console.log(data);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  showAlert() {
+    this.alertService.alert(
+      this.alertTypes.success,
+      'Success',
+      'Category added successfully.'
+    );
   }
 
   getSearchTerm(value: string): void {

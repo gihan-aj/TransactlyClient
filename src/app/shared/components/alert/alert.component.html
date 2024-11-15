@@ -1,0 +1,5 @@
+<div mat-dialog-content class="text-center p-4">
+  <h1 [ngClass]="[data.type] + '-text'">{{ data.title }}</h1>
+  <p>{{ data.text }}</p>
+  <button [ngClass]="[data.type]" mat-flat-button (click)="onOk()">Ok</button>
+</div>
