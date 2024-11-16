@@ -1,0 +1,49 @@
+.contained {
+  display: inline-block;
+  border: 1px solid var(--sys-outline-variant);
+  padding: 2rem;
+  border-radius: var(--mdc-outlined-card-container-shape);
+}
+h3 {
+  margin: 0;
+}
+
+.mat-column-select {
+  overflow: initial;
+}
+
+.success {
+  color: var(--sys-on-primary);
+  background-color: var(--sys-primary);
+}
+
+.info {
+  color: var(--sys-on-tertiary);
+  background-color: var(--sys-tertiary);
+}
+
+.warning {
+  color: var(--sys-on-secondary);
+  background-color: var(--sys-secondary);
+}
+
+.danger {
+  color: var(--sys-on-error);
+  background-color: var(--sys-error);
+}
+
+.success-text {
+  color: var(--sys-primary);
+}
+
+.info-text {
+  color: var(--sys-tertiary);
+}
+
+.warning-text {
+  color: var(--sys-secondary);
+}
+
+.danger-text {
+  color: var(--sys-error);
+}

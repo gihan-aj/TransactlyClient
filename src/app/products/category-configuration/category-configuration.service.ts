@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { PagedListInterface } from '../../shared/models/paged-list.interface';
 import { CategoryResponseInterface } from './category-response.interface';
+import { BulkRequest } from '../../shared/models/bulk-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +44,24 @@ export class CategoryConfigurationService {
 
   getById(id: string): Observable<CategoryResponseInterface> {
     const url = `${this.baseUrl}/${id}`;
-
     return this.http.get<CategoryResponseInterface>(url);
+  }
+
+  activate(ids: string[]) {
+    const url = `${this.baseUrl}/activate`;
+    const body: BulkRequest = { ids: ids };
+    return this.http.put(url, body);
+  }
+
+  deactivate(ids: string[]) {
+    const url = `${this.baseUrl}/deactivate`;
+    const body: BulkRequest = { ids: ids };
+    return this.http.put(url, body);
+  }
+
+  delete(ids: string[]) {
+    const url = `${this.baseUrl}/delete`;
+    const body: BulkRequest = { ids: ids };
+    return this.http.put(url, body);
   }
 }

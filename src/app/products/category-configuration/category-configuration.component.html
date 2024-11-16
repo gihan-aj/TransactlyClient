@@ -1,15 +1,36 @@
-<h1 class="mb-4">Category Configuration</h1>
-
-<div class="row align-items-center mb-3">
+<div class="row align-items-center">
   <div class="col-md-8 col-sm-12">
-    <app-search-bar
-      [placeHolderText]="'Search categories here...'"
-      (searchTerm)="getSearchTerm($event)"
-    ></app-search-bar>
+    <h1 class="mb-4">Category Configuration</h1>
   </div>
-  <div class="col-md-4 col-sm-12 text-md-end text-sm-start mt-2 mt-md-0">
-    <button mat-flat-button (click)="showDialog()">Add new category</button>
+  <div class="col-md-4 col-sm-12 text-md-end text-sm-start mt-2 mt-md-0 mb-3">
+    <button mat-flat-button>Add new category</button>
   </div>
 </div>
 
-<!-- <button (click)="showAlert(alertTypes.success)">Show success</button> -->
+<app-search-bar
+  [placeHolderText]="'Search categories here...'"
+  (searchTerm)="getSearchTerm($event)"
+></app-search-bar>
+
+<div class="row align-items-center mb-3">
+  @if (loadingData()) {
+  <app-progress-bar></app-progress-bar>
+  }@else {
+  <app-table
+    [loading]="loadingData()"
+    [allowSelect]="true"
+    [columnsToBeDisplayed]="tableColumns"
+    [data]="tableData"
+    [enableActions]="true"
+    [enableBulkActions]="true"
+    (selectedChange)="onSelect($event)"
+    (edit)="onEdit($event)"
+    (activate)="onActvate($event)"
+    (deactivate)="onDeactivate($event)"
+    (delete)="onDelete($event)"
+    (activateMultiple)="onMultipleActivate($event)"
+    (deactivateMultiple)="onMultipleDeactivate($event)"
+    (deleteMultiple)="onMultipleDelete($event)"
+  ></app-table>
+  }
+</div>

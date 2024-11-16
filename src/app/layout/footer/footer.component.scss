@@ -1,11 +1,10 @@
 .footer {
   margin: 0 auto;
-  // text-align: center;
   padding: 1rem 0;
   padding-left: 1rem;
-  position: fixed;
+  position: relative;
   bottom: 0;
-  width: 100%;
+  width: 95%;
   font-size: 0.8rem;
   z-index: 10;
   background-color: var(--sys-background);

@@ -15,14 +15,18 @@
       [sideNavbarOpened]="sideNavbarOpened()"
       (changeSideNavbarOpened)="changeSideNavbarOpened($event)"
     ></app-top-bar>
+    <div class="d-flex flex-column spaced">
+      <div class="flex-fill">
+        <div class="container pb-2">
+          <app-breadcrumb></app-breadcrumb>
+        </div>
 
-    <div class="container pb-2">
-      <app-breadcrumb></app-breadcrumb>
-    </div>
-    <div class="container">
-      <router-outlet />
-    </div>
+        <div class="container">
+          <router-outlet />
+        </div>
+      </div>
 
-    <app-footer></app-footer>
+      <app-footer></app-footer>
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>
