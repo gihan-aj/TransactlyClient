@@ -3,8 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { PagedListInterface } from '../../shared/models/paged-list.interface';
-import { CategoryResponseInterface } from './category-response.interface';
 import { BulkRequest } from '../../shared/models/bulk-request.interface';
+import { CategoryInterface } from './category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class CategoryConfigurationService {
     sortColumn?: string,
     sortOrder?: string,
     searchTerm?: string
-  ): Observable<PagedListInterface<CategoryResponseInterface>> {
+  ): Observable<PagedListInterface<CategoryInterface>> {
     const url = this.baseUrl;
 
     let queryParams = new HttpParams();
@@ -37,14 +37,14 @@ export class CategoryConfigurationService {
     queryParams = queryParams.append('page', page.toString());
     queryParams = queryParams.append('pageSize', pageSize.toString());
 
-    return this.http.get<PagedListInterface<CategoryResponseInterface>>(url, {
+    return this.http.get<PagedListInterface<CategoryInterface>>(url, {
       params: queryParams,
     });
   }
 
-  getById(id: string): Observable<CategoryResponseInterface> {
+  getById(id: string): Observable<CategoryInterface> {
     const url = `${this.baseUrl}/${id}`;
-    return this.http.get<CategoryResponseInterface>(url);
+    return this.http.get<CategoryInterface>(url);
   }
 
   activate(ids: string[]) {

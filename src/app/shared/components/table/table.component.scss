@@ -47,3 +47,8 @@ h3 {
 .danger-text {
   color: var(--sys-error);
 }
+
+.mat-column-select {
+  overflow: initial;
+  flex: 0 0 20px;
+}

@@ -3,34 +3,46 @@
     <h1 class="mb-4">Category Configuration</h1>
   </div>
   <div class="col-md-4 col-sm-12 text-md-end text-sm-start mt-2 mt-md-0 mb-3">
-    <button mat-flat-button>Add new category</button>
+    <button mat-flat-button extended (click)="addNewCategory()">
+      <mat-icon>add</mat-icon>
+      Add New Category
+    </button>
   </div>
 </div>
 
 <app-search-bar
-  [placeHolderText]="'Search categories here...'"
-  (searchTerm)="getSearchTerm($event)"
+  [searchBarPlaceholder]="'Search categories here...'"
+  [sortByOptions]="sortByOptions"
+  [(searchTerm)]="searchTerm"
+  [(sortBy)]="sortBy"
+  [(sortOrder)]="sortOrder"
+  (searchTermChange)="getSearchTerm($event)"
+  (sortByChange)="getSortBy($event)"
+  (sortOrderChange)="getSortOrder($event)"
 ></app-search-bar>
 
-<div class="row align-items-center mb-3">
-  @if (loadingData()) {
-  <app-progress-bar></app-progress-bar>
-  }@else {
-  <app-table
-    [loading]="loadingData()"
-    [allowSelect]="true"
-    [columnsToBeDisplayed]="tableColumns"
-    [data]="tableData"
-    [enableActions]="true"
-    [enableBulkActions]="true"
-    (selectedChange)="onSelect($event)"
-    (edit)="onEdit($event)"
-    (activate)="onActvate($event)"
-    (deactivate)="onDeactivate($event)"
-    (delete)="onDelete($event)"
-    (activateMultiple)="onMultipleActivate($event)"
-    (deactivateMultiple)="onMultipleDeactivate($event)"
-    (deleteMultiple)="onMultipleDelete($event)"
-  ></app-table>
-  }
-</div>
+<app-table
+  [cellHeaders]="cellHeaders"
+  [dataSource]="dataSource"
+  [columnsToBeDisplayed]="columnsToBeDisplayed"
+  [allowActions]="true"
+  [allowMultiSelect]="true"
+  [allowBulkActions]="true"
+  (view)="viewCategory($event)"
+  (edit)="editCategory($event)"
+  (activate)="activateCategories($event)"
+  (deactivate)="deactivateCategories($event)"
+  (delete)="deleteCategories($event)"
+  (bulkActivate)="activateCategories($event)"
+  (bulkDeactivate)="deactivateCategories($event)"
+  (bulkDelete)="deleteCategories($event)"
+></app-table>
+
+<mat-paginator
+  *ngIf="!(dataSource.loading$ | async)"
+  [length]="dataSource.totalCount"
+  [pageIndex]="page - 1"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="pageChanged($event)"
+></mat-paginator>

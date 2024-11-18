@@ -7,92 +7,75 @@ import {
   output,
   Signal,
 } from '@angular/core';
-import { CapitalizeFirstLetterPipe } from '../../pipes/capitalize-first-letter.pipe';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { GenericDataSource } from '../../models/generic-data-source';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FormatHeaderPipe } from '../../pipes/format-header.pipe';
 
 @Component({
   selector: 'app-table',
   standalone: true,
   imports: [
     CommonModule,
-    CapitalizeFirstLetterPipe,
     MatTableModule,
-    MatCheckboxModule,
-    MatIconModule,
+    MatProgressBarModule,
+    FormatHeaderPipe,
     MatButtonModule,
+    MatIconModule,
     MatTooltip,
+    MatCheckboxModule,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
-export class TableComponent<T> implements OnInit {
-  /**
-   * INPUT SIGNALS
-   */
-  loading = input.required<boolean>();
-  allowSelect = input<boolean>(false);
-  data = input.required<T[]>();
+export class TableComponent<T extends HasId> implements OnInit {
+  cellHeaders = input.required<string[]>();
+  dataSource = input.required<GenericDataSource<T>>();
   columnsToBeDisplayed = input.required<string[]>();
-  enableActions = input<boolean>(false);
-  enableBulkActions = input<boolean>(false);
 
-  initialSelection = [];
-  allowMultiSelect = true;
+  allowActions = input<boolean>(false);
 
-  /**
-   * COMPUTED SIGNALS
-   */
-  displayColumns: Signal<string[]> = computed(() => {
-    const newColumns = this.columnsToBeDisplayed();
-    if (this.allowSelect()) {
-      newColumns.unshift('select');
-    }
-    if (this.enableActions()) {
-      newColumns.push('actions');
-    }
-    return newColumns;
-  });
-
-  columns: Signal<string[]> = computed(() =>
-    this.data().length > 0 ? Object.keys(this.data()[0] as string) : []
+  initialSelection: T[] = [];
+  allowMultiSelect = input<boolean>(false);
+  selection: Signal<SelectionModel<T>> = computed(
+    () => new SelectionModel<T>(this.allowMultiSelect(), this.initialSelection)
   );
 
-  dataSource: Signal<MatTableDataSource<T>> = computed(
-    () => new MatTableDataSource<T>(this.data())
-  );
+  allowBulkActions = input<boolean>(false);
 
-  selection: Signal<SelectionModel<T>> = computed(() => {
-    return new SelectionModel<T>(this.allowMultiSelect, this.initialSelection);
-  });
-
-  /**
-   * OUTPUT SIGNALS
-   */
-  selectedChange = output<T[]>();
+  view = output<T>();
   edit = output<T>();
-  activate = output<T>();
-  deactivate = output<T>();
-  delete = output<T>();
-  activateMultiple = output<T[]>();
-  deactivateMultiple = output<T[]>();
-  deleteMultiple = output<T[]>();
+  activate = output<T[]>();
+  deactivate = output<T[]>();
+  delete = output<T[]>();
+  selectionChange = output<T[]>();
+  bulkActivate = output<T[]>();
+  bulkDeactivate = output<T[]>();
+  bulkDelete = output<T[]>();
 
-  /**
-   * ON INITIALIZING
-   */
+  constructor() {}
+
   ngOnInit(): void {
-    // this.selection().clear();
-    // this.onSelect();
+    this.dataSource().dataStream$.subscribe({
+      next: () => this.selection().clear(),
+    });
+
+    this.selection().changed.subscribe({
+      next: () => {
+        this.selectionChange.emit(this.selection().selected);
+      },
+    });
   }
 
   isAllSelected() {
     const numSelected = this.selection().selected.length;
-    const numRows = this.dataSource().data.length;
+    const numRows = this.dataSource().itemCount;
+
     return numSelected === numRows;
   }
 
@@ -101,56 +84,50 @@ export class TableComponent<T> implements OnInit {
       this.selection().clear();
       return;
     }
-
-    this.selection().select(...this.dataSource().data);
+    this.selection().select(...this.dataSource().items);
   }
 
-  checkboxLabel(row?: T): string {
+  checkboxLabel(row?: any) {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
 
-    return `${
-      this.selection().isSelected(row) ? 'deselect' : 'select'
-    } row ${row}`;
+    return `${this.selection().isSelected(row) ? 'deselect' : 'select'} row ${
+      row.id
+    }`;
   }
 
-  onSelect(): void {
-    this.selection().changed.subscribe({
-      next: () => {
-        this.selectedChange.emit(this.selection().selected);
-      },
-      error: () => {
-        this.selectedChange.emit([]);
-      },
-    });
+  onView(row: T) {
+    this.view.emit(row);
   }
-
-  onEdit(row: T): void {
+  onDelete(row: T) {
+    this.delete.emit([row]);
+  }
+  onEdit(row: T) {
     this.edit.emit(row);
   }
-
-  onActivate(row: T): void {
-    this.activate.emit(row);
+  onActivate(row: T) {
+    this.activate.emit([row]);
+  }
+  onDeactivate(row: T) {
+    this.deactivate.emit([row]);
   }
 
-  onDeactivate(row: T): void {
-    this.deactivate.emit(row);
+  onMultipleDelete() {
+    this.bulkDelete.emit(this.selection().selected);
   }
+  onMultipleDeactivate() {
+    this.bulkDeactivate.emit(this.selection().selected);
+  }
+  onMultipleActivate() {
+    this.bulkActivate.emit(this.selection().selected);
+  }
+}
 
-  onDelete(row: T): void {
-    this.delete.emit(row);
-  }
+/**
+ * TO MAKE SURE T TYPE HAS AN ID
+ */
 
-  onMultipleActivate(): void {
-    this.activateMultiple.emit(this.selection().selected);
-  }
-
-  onMultipleDeactivate(): void {
-    this.deactivateMultiple.emit(this.selection().selected);
-  }
-
-  onMultipleDelete(): void {
-    this.deleteMultiple.emit(this.selection().selected);
-  }
+interface HasId {
+  id: string | number;
 }

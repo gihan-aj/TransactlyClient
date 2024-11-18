@@ -1,18 +1,42 @@
-<form>
-  <mat-form-field class="w-100">
-    <mat-label>Search</mat-label>
-    <input
-      matInput
-      name="searchBar"
-      type="search"
-      [(ngModel)]="value"
-      (ngModelChange)="valueChanged()"
-      placeholder="{{ placeHolderText() }}"
-    />
-    @if (value) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="value = ''">
-      <mat-icon>close</mat-icon>
-    </button>
-    }
-  </mat-form-field>
+<form #formSearch>
+  <div class="row">
+    <div class="col-12 col-sm-4 mb-3 mb-sm-0 me-sm-0">
+      <mat-form-field class="w-100">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          name="searchBar"
+          type="search"
+          [(ngModel)]="searchTerm"
+          placeholder="{{ searchBarPlaceholder() }}"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-sm-4 mb-3 mb-sm-0 me-sm-0">
+      <mat-form-field class="w-100">
+        <mat-label>Sort By</mat-label>
+        <mat-select [(value)]="sortBy">
+          @for (sortColumn of sortByOptions(); track $index) {
+
+          <mat-option value="{{ sortColumn }}"
+            >{{ sortColumn | formatHeader }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+      <mat-form-field class="w-100">
+        <mat-label>Sort Order</mat-label>
+        <mat-select [(value)]="sortOrder">
+          <mat-option value="{{ sortOrderTypes.ascending }}"
+            >Ascending</mat-option
+          >
+          <mat-option value="{{ sortOrderTypes.descending }}"
+            >Descending</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
 </form>

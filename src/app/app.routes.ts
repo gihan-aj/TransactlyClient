@@ -1,6 +1,7 @@
 import { Router, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { CategoryResolver } from './products/category-configuration/category.resolver';
 
 export const routes: Routes = [
   {
