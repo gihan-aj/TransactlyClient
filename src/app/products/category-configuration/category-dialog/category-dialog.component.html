@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>{{ popupData.title }}</h2>
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <mat-form-field class="w-100 mb-2">
+      <mat-label>Name</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="name"
+        [readonly]="isViewMode()"
+        maxlength="50"
+      />
+      <mat-error *ngIf="categoryForm.get('name')?.hasError('required')"
+        >Name is <strong>required</strong></mat-error
+      >
+      <mat-error *ngIf="categoryForm.get('name')?.hasError('maxlength')">
+        Name cannot exceed 50 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        [readonly]="isViewMode()"
+        maxlength="255"
+      ></textarea>
+      <mat-error *ngIf="categoryForm.get('description')?.hasError('maxlength')">
+        Description cannot exceed 255 characters.
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <div mat-dialog-actions *ngIf="!isViewMode()">
+    <button type="button" mat-button mat-dialog-close>Cancel</button>
+    <button type="submit" mat-flat-button [disabled]="categoryForm.invalid">
+      Save
+    </button>
+  </div>
+  <div mat-dialog-actions *ngIf="isViewMode()">
+    <button type="button" mat-button mat-dialog-close>Close</button>
+  </div>
+</form>

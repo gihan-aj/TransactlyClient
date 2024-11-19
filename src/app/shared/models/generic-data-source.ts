@@ -15,7 +15,7 @@ export class GenericDataSource<T> implements DataSource<T> {
   public pageSize: number | null = null;
   public items: T[] = [];
   public itemCount: number | null = null;
-  public totalCount: number | null = null;
+  public totalCount: number = 0;
 
   constructor(
     private dataService: {
@@ -61,6 +61,7 @@ export class GenericDataSource<T> implements DataSource<T> {
         },
         error: (error) => {
           this.errorHandling.handle(error);
+          this.totalCount = 0;
         },
         complete: () => {
           this.loadingSubject.next(false);

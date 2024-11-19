@@ -102,10 +102,7 @@
 </mat-table>
 
 <!-- No data to show message -->
-<div
-  *ngIf="!(dataSource().loading$ | async) && dataSource().totalCount === 0"
-  class="text-center p-3"
->
+<div *ngIf="dataSource().totalCount === 0" class="text-center p-3">
   <div class="contained">
     <h3 class="mb-2">No Data Available</h3>
     <p>
@@ -116,7 +113,7 @@
 </div>
 
 <!-- Bulk actions -->
-@if (allowBulkActions()) {
+@if (allowBulkActions() && dataSource().totalCount > 0 ) {
 <div class="row mt-2">
   <div
     class="col-12 d-flex flex-column flex-md-row justify-content-md-start gap-2"

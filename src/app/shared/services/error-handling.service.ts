@@ -11,17 +11,18 @@ export class ErrorHandlingService {
   private alertTypes = AlertTypeEnum;
 
   handle(error: any): void {
-    if (error.error.title) {
+    console.log('ERROR', error);
+    if (error?.error?.title) {
       this.alertService.alert(
         this.alertTypes.danger,
         error.error.title,
-        error.error.detail
+        `${error.error.detail} (${error.staus})`
       );
     } else {
       this.alertService.alert(
         this.alertTypes.danger,
         'Unknown Error',
-        'Unidentified error occured'
+        `Unidentified error occured (${error.status})`
       );
     }
   }

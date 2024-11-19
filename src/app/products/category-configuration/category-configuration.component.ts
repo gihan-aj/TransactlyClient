@@ -1,6 +1,7 @@
 import {
   Component,
   inject,
+  model,
   OnDestroy,
   OnInit,
   signal,
@@ -22,6 +23,10 @@ import { DialogService } from '../../shared/services/dialog.service';
 import { AlertTypeEnum } from '../../shared/enums/alert-type.enum';
 import { AlertService } from '../../shared/services/alert.service';
 import { Subject, switchMap, takeUntil } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupTypeEnum } from '../../shared/enums/popup-type.enum';
+import { PopupInterface } from '../../shared/models/popup.interface';
+import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
 
 @Component({
   selector: 'app-category-configuration',
@@ -47,6 +52,10 @@ export class CategoryConfigurationComponent implements OnInit, OnDestroy {
   private alerService = inject(AlertService);
 
   private errorHandling = inject(ErrorHandlingService);
+
+  readonly dialog = inject(MatDialog);
+
+  category = model<CategoryInterface>();
 
   cellHeaders = ['id', 'name', 'description', 'isActive'];
 
@@ -92,8 +101,64 @@ export class CategoryConfigurationComponent implements OnInit, OnDestroy {
     );
   }
 
+  private openPopup(type: PopupTypeEnum, data?: CategoryInterface) {
+    const popupData: PopupInterface<CategoryInterface> = {
+      title:
+        type === PopupTypeEnum.Add
+          ? 'Add Category'
+          : type === PopupTypeEnum.Edit
+          ? 'Edit Category'
+          : 'View Category',
+
+      popupType: type,
+      data: data,
+    };
+
+    const dialogRef = this.dialog.open(CategoryDialogComponent, {
+      data: popupData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (type === PopupTypeEnum.Add) {
+          this.categoryService.add(result).subscribe({
+            next: () => {
+              this.alerService.alert(
+                AlertTypeEnum.success,
+                'Success',
+                'Category was added successfully.'
+              );
+            },
+            error: (error) => {
+              this.errorHandling.handle(error);
+            },
+            complete: () => {
+              this.refresh();
+            },
+          });
+        } else if (type === PopupTypeEnum.Edit) {
+          this.categoryService.update(result).subscribe({
+            next: () => {
+              this.alerService.alert(
+                AlertTypeEnum.success,
+                'Success',
+                'Category was updated successfully.'
+              );
+            },
+            error: (error) => {
+              this.errorHandling.handle(error);
+            },
+            complete: () => {
+              this.refresh();
+            },
+          });
+        }
+      }
+    });
+  }
+
   addNewCategory() {
-    console.log('Add new');
+    this.openPopup(PopupTypeEnum.Add);
   }
 
   getSearchTerm(str: string) {
@@ -118,11 +183,26 @@ export class CategoryConfigurationComponent implements OnInit, OnDestroy {
   }
 
   viewCategory(item: CategoryInterface) {
-    console.log(item);
+    this.openPopup(PopupTypeEnum.View, item);
   }
 
   editCategory(item: CategoryInterface) {
-    console.log(item);
+    this.dialogService
+      .openDilaog(
+        AlertTypeEnum.info,
+        'Edit Confirmation',
+        `Are you sure you want to edit this category
+        ?`,
+        'Edit'
+      )
+      .afterClosed()
+      .subscribe({
+        next: (accepted) => {
+          if (accepted) {
+            this.openPopup(PopupTypeEnum.Edit, item);
+          }
+        },
+      });
   }
 
   activateCategories(items: CategoryInterface[]) {
@@ -219,33 +299,68 @@ export class CategoryConfigurationComponent implements OnInit, OnDestroy {
         'Delete'
       )
       .afterClosed()
-      .pipe(
-        takeUntil(this.destroy$),
-        switchMap((accepted) => {
-          if (accepted) {
-            return this.categoryService.delete(ids);
-          }
-
-          return [];
-        })
-      )
       .subscribe({
-        next: () => {
-          this.alerService.alert(
-            AlertTypeEnum.success,
-            'Success',
-            `${
-              items.length > 1 ? 'Categories were' : 'The category was'
-            } successfully deleted.`
-          );
-        },
-        error: (error) => {
-          this.errorHandling.handle(error);
-        },
-        complete: () => {
-          this.refresh();
+        next: (accepted) => {
+          if (accepted) {
+            this.categoryService.delete(ids).subscribe({
+              next: (respone) => {
+                console.log(respone);
+                this.alerService.alert(
+                  AlertTypeEnum.success,
+                  'Success',
+                  `${
+                    items.length > 1 ? 'Categories were' : 'The category was'
+                  } successfully deleted.`
+                );
+              },
+              error: (error) => {
+                this.errorHandling.handle(error);
+              },
+              complete: () => {
+                this.refresh();
+              },
+            });
+          }
         },
       });
+    // const ids = items.map((item) => item.id);
+    // this.dialogService
+    //   .openDilaog(
+    //     AlertTypeEnum.danger,
+    //     'Delete Confirmation',
+    //     `Are you sure you want to delete ${
+    //       items.length > 1 ? 'these categories' : 'this category'
+    //     }?`,
+    //     'Delete'
+    //   )
+    //   .afterClosed()
+    //   .pipe(
+    //     takeUntil(this.destroy$),
+    //     switchMap((accepted) => {
+    //       if (accepted) {
+    //         return this.categoryService.delete(ids);
+    //       }
+
+    //       return [];
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: () => {
+    //       this.alerService.alert(
+    //         AlertTypeEnum.success,
+    //         'Success',
+    //         `${
+    //           items.length > 1 ? 'Categories were' : 'The category was'
+    //         } successfully deleted.`
+    //       );
+    //     },
+    //     error: (error) => {
+    //       this.errorHandling.handle(error);
+    //     },
+    //     complete: () => {
+    //       this.refresh();
+    //     },
+    //   });
   }
 
   ngOnDestroy(): void {

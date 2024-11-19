@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
@@ -62,6 +62,32 @@ export class CategoryConfigurationService {
   delete(ids: string[]) {
     const url = `${this.baseUrl}/delete`;
     const body: BulkRequest = { ids: ids };
+    // const req = new HttpRequest('DELETE', url, body);
     return this.http.put(url, body);
   }
+
+  add(category: CategoryInterface) {
+    const url = this.baseUrl;
+    const body: CategoryRequest = {
+      name: category.name,
+      description: category.description,
+    };
+
+    return this.http.post(url, body);
+  }
+
+  update(category: CategoryInterface) {
+    const url = `${this.baseUrl}/${category.id}`;
+    const body: CategoryRequest = {
+      name: category.name,
+      description: category.description,
+    };
+
+    return this.http.put(url, body);
+  }
+}
+
+interface CategoryRequest {
+  name: string;
+  description: string;
 }
